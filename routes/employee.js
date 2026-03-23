@@ -1,27 +1,19 @@
 import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import dotenv from "dotenv";
-import employeeRoute from "./routes/employee.js";
 
-dotenv.config();
+import { 
+  getAllEmployee,
+  getEmployee,
+  createEmployee,
+  deleteEmployee,
+  updateEmployee
+} from "../controllers/employee.js";
 
-const app = express();
-const PORT = 3000;
+const router = express.Router();
 
-const corsOptions = {
-  origin: "*",
-};
+router.get("/", getAllEmployee);
+router.post("/", createEmployee);
+router.get("/:id", getEmployee);
+router.delete("/:id", deleteEmployee);
+router.put("/:id", updateEmployee);
 
-app.use(cors(corsOptions));
-app.use(bodyParser.json());
-
-app.use("/employees", employeeRoute);
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+export default router;

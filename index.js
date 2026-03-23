@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import employeeRoute from "./routes/employee.js";
+
 
 dotenv.config();
 
@@ -15,11 +17,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+app.use('/api/employee', employeeRoute);
 
-app.use("/api/employee", employeeRoute);
+app.use((err,req,res,next)=> {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal server error";
+  return res.status(statusCode).json({error : message});
+  
+})
+
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
